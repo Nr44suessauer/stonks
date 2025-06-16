@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This project provides a modular framework for benchmarking Large Language Models (LLMs) available through the Ollama API. It enables comparison of different models regarding speed, performance, and response quality for arbitrary tasks. Evaluation and visualization are performed directly in the Jupyter Notebook.
+This project provides a modular framework for benchmarking Large Language Models (LLMs) available through the Ollama API. It enables comparison of different models regarding speed, performance, and response quality for arbitrary tasks. The framework is now organized into **two main notebooks** for better clarity and maintainability.
 
 ---
 
@@ -10,7 +10,9 @@ This project provides a modular framework for benchmarking Large Language Models
 
 ```
 DeepLearning/
-├── model_benchmark.ipynb      # Main notebook for configuration, execution & evaluation
+├── model_benchmark.ipynb      # Quick start notebook - basic model comparison
+├── detailed_tests.ipynb       # Comprehensive testing across all capabilities
+├── test_prompts.json          # External test prompt storage (NEW)
 ├── model_benchmark_utils.py   # Utility functions: orchestrates benchmark, evaluation, visualization
 ├── benchmark_core.py          # Core logic: execution of individual benchmarks, timing, metrics
 ├── model_manager.py           # Model management: check availability, load models
@@ -21,30 +23,63 @@ DeepLearning/
 └── ReadMe.md                  # This documentation
 ```
 
+## 📊 Notebook Structure
+
+### 🚀 Quick Start: `model_benchmark.ipynb`
+- **Purpose**: Simple, fast model comparison
+- **Features**: Basic benchmark tasks, minimal setup
+- **Use Case**: Initial model evaluation, quick comparisons
+- **Content**: Essential configuration and basic results
+
+### 🔬 Detailed Testing: `detailed_tests.ipynb`
+- **Purpose**: Comprehensive model evaluation
+- **Features**: 4 specialized test categories with extensive prompts
+- **Use Case**: In-depth analysis, research, model selection
+- **Content**: Reasoning, coding, math, and creative writing tests
+
+### 📋 Test Prompts: `test_prompts.json`
+- **Purpose**: Centralized prompt management
+- **Features**: External JSON file for easy maintenance
+- **Use Case**: Customize tests without modifying notebook code
+- **Content**: Organized by test category (reasoning, coding, math, creative)
+
 ---
 
 ## Architecture Overview
 
 ```
-+-------------------+
-| model_benchmark   |
-|    .ipynb         |
-+-------------------+
-          |
-          v
-+-------------------+
-| model_benchmark_  |
-|   utils.py        |
-+-------------------+
-          |
-   +------+------+-------------------+
-   |      |      |                   |
-   v      v      v                   v
-ollama_  model_  benchmark_     visualization.py
-server.py manager.py core.py
++-------------------+     +-------------------+
+| model_benchmark   |     | detailed_tests    |
+|    .ipynb         |     |    .ipynb         |
+| (Quick Start)     |     | (Comprehensive)   |
++-------------------+     +-------------------+
+          |                         |
+          +------------+------------+
+                       |
+                       v
+              +-------------------+
+              | test_prompts.json |
+              | (External Prompts)|
+              +-------------------+
+                       |
+                       v
+              +-------------------+
+              | model_benchmark_  |
+              |   utils.py        |
+              +-------------------+
+                       |
+   +-------------------+-------------------+-------------------+
+   |                   |                   |                   |
+   v                   v                   v                   v
+ollama_              model_            benchmark_        visualization.py
+server.py           manager.py          core.py
 ```
 
-- **model_benchmark.ipynb**: Central control, configuration and evaluation. Contains the main logic for the workflow, calls all core functions.
+### Component Responsibilities:
+
+- **model_benchmark.ipynb**: Quick start notebook for basic model comparison
+- **detailed_tests.ipynb**: Comprehensive testing across reasoning, coding, math, and creative domains
+- **test_prompts.json**: External prompt storage for easy test customization
 - **model_benchmark_utils.py**: Orchestrates the benchmark process, contains utility functions like `run_benchmark_test()`, evaluation and visualization.
 - **ollama_server.py**: Starts and checks the Ollama server, contains e.g. `start_ollama_server()`, `check_ollama_status()`.
 - **model_manager.py**: Checks and loads models, e.g. with `check_model_availability()`, `load_model()`.
@@ -53,11 +88,60 @@ server.py manager.py core.py
 
 ---
 
+## 🚀 Quick Start Guide
+
+### 1. Basic Model Comparison
+```bash
+# Open the quick start notebook
+jupyter notebook model_benchmark.ipynb
+```
+
+1. **Configure Models**: Edit the `MODELS` list in the configuration cell
+2. **Run Benchmark**: Execute the benchmark cell
+3. **View Results**: Check basic performance metrics and response quality
+
+### 2. Comprehensive Testing
+```bash
+# Open the detailed testing notebook
+jupyter notebook detailed_tests.ipynb
+```
+
+1. **Run All Tests**: Execute cells for reasoning, coding, math, and creative tests
+2. **Analyze Results**: Review detailed performance analysis and recommendations
+3. **Customize Tests**: Edit `test_prompts.json` to add your own test cases
+
+### 3. Customize Test Prompts
+```json
+{
+  "basic_benchmark": [
+    {
+      "name": "Your Custom Test",
+      "prompt": "Your custom prompt here...",
+      "max_tokens": 100
+    }
+  ],
+  "reasoning_and_text": [...],
+  "code_generation": [...],
+  "mathematical_reasoning": [...],
+  "creative_writing": [...]
+}
+```
+
+---
+
 ## Detailed Workflow Diagram
 
 ```
 +-----------------------------+
-| Notebook Start              |
+| Choose Notebook             |
+| model_benchmark.ipynb OR    |
+| detailed_tests.ipynb        |
++-----------------------------+
+            |
+            v
++-----------------------------+
+| Load External Prompts       |
+| from test_prompts.json      |
 +-----------------------------+
             |
             v

@@ -1,0 +1,139 @@
+{
+  "basic_benchmark": [
+    {
+      "name": "Text Generation",
+      "prompt": "Write a short paragraph about AI.",
+      "max_tokens": 30
+    },
+    {
+      "name": "Code Generation",
+      "prompt": "Write a simple Python function that checks if a number is even.",
+      "max_tokens": 30
+    },
+    {
+      "name": "Factual Knowledge",
+      "prompt": "What is the difference between ML and AI? Short answer.",
+      "max_tokens": 30
+    }
+  ],
+  "reasoning_and_text": [
+    {
+      "name": "Logical Reasoning",
+      "prompt": "If all cats are animals, and some animals are pets, can we conclude that some cats are pets? Explain your reasoning step by step.",
+      "max_tokens": 100
+    },
+    {
+      "name": "Text Summarization",
+      "prompt": "Summarize this concept in 2-3 sentences: Artificial Intelligence is a branch of computer science that aims to create machines capable of performing tasks that typically require human intelligence.",
+      "max_tokens": 80
+    },
+    {
+      "name": "Creative Description",
+      "prompt": "Describe a futuristic city in the year 2150. Focus on technology and daily life.",
+      "max_tokens": 120
+    },
+    {
+      "name": "Problem Analysis",
+      "prompt": "A company's sales dropped 20% this quarter. List 3 possible causes and suggest one solution for each.",
+      "max_tokens": 100
+    }
+  ],
+  "code_generation": [
+    {
+      "name": "Python Function",
+      "prompt": "Write a Python function that finds the second largest number in a list. Include error handling for edge cases.",
+      "max_tokens": 150
+    },
+    {
+      "name": "JavaScript Algorithm",
+      "prompt": "Create a JavaScript function that implements binary search on a sorted array. Return the index or -1 if not found.",
+      "max_tokens": 120
+    },
+    {
+      "name": "SQL Query",
+      "prompt": "Write a SQL query to find the top 3 customers by total order value from tables 'customers' and 'orders'.",
+      "max_tokens": 100
+    },
+    {
+      "name": "Data Structure",
+      "prompt": "Implement a simple stack class in Python with push, pop, and peek methods. Include proper error handling.",
+      "max_tokens": 150
+    },
+    {
+      "name": "Algorithm Explanation",
+      "prompt": "Explain how the quicksort algorithm works and write a simple implementation in Python.",
+      "max_tokens": 200
+    }
+  ],
+  "mathematical_reasoning": [
+    {
+      "name": "Basic Algebra",
+      "prompt": "Solve for x: 3x + 7 = 22. Show your steps.",
+      "max_tokens": 80
+    },
+    {
+      "name": "Word Problem",
+      "prompt": "A train travels 120 km in 2 hours. If it increases its speed by 20 km/h, how long will it take to travel 180 km?",
+      "max_tokens": 120
+    },
+    {
+      "name": "Probability",
+      "prompt": "What is the probability of getting exactly 2 heads when flipping a fair coin 4 times? Explain your calculation.",
+      "max_tokens": 100
+    },
+    {
+      "name": "Geometry",
+      "prompt": "Calculate the area of a circle with radius 7 cm. Then find the circumference. Use π ≈ 3.14159.",
+      "max_tokens": 100
+    },
+    {
+      "name": "Logic Puzzle",
+      "prompt": "If 2 cats catch 2 mice in 2 minutes, how many cats are needed to catch 6 mice in 6 minutes? Explain your reasoning.",
+      "max_tokens": 120
+    }
+  ],
+  "creative_writing": [
+    {
+      "name": "Short Story Opening",
+      "prompt": "Write the opening paragraph of a science fiction short story about a librarian who discovers that books can transport readers to their settings.",
+      "max_tokens": 150
+    },
+    {
+      "name": "Character Description",
+      "prompt": "Create a detailed character description for a mysterious detective in 1920s Paris. Include their appearance, personality, and one unique quirk.",
+      "max_tokens": 120
+    },
+    {
+      "name": "Dialogue Writing",
+      "prompt": "Write a conversation between a young inventor and their skeptical mentor about a new invention that could change the world.",
+      "max_tokens": 140
+    },
+    {
+      "name": "Poetry Creation",
+      "prompt": "Write a short poem (4-6 lines) about the feeling of discovering something new. Use vivid imagery and metaphors.",
+      "max_tokens": 80
+    },
+    {
+      "name": "World Building",
+      "prompt": "Describe a unique fantasy world where gravity works differently. Explain how this affects daily life and architecture.",
+      "max_tokens": 130
+    }
+  ],
+  "model_comparison": [
+    {
+      "name": "Ethical Dilemma",
+      "prompt": "A self-driving car must choose between hitting one person or swerving to hit three people. How should it decide? Discuss the ethical considerations.",
+      "max_tokens": 180
+    },
+    {
+      "name": "Complex Problem Solving",
+      "prompt": "You are managing a project with limited resources, tight deadlines, and conflicting stakeholder demands. Outline a strategy to handle this situation.",
+      "max_tokens": 160
+    },
+    {
+      "name": "Technical Explanation",
+      "prompt": "Explain how blockchain technology works to someone with no technical background. Use simple analogies.",
+      "max_tokens": 140
+    }
+  ]
+}
