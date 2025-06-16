@@ -1,0 +1,28 @@
+# LLM Benchmark Framework - Python Dependencies
+# Core libraries
+requests>=2.31.0
+pandas>=2.0.0
+numpy>=1.24.0
+matplotlib>=3.7.0
+
+# Jupyter Support (JupyterLab is more modern than classic notebook)
+jupyterlab>=4.0.0
+ipython>=8.10.0
+ipywidgets>=8.0.0
+
+# Fallback for classic notebook (in case JupyterLab has issues)
+notebook>=6.5.4,<7.0.0
+
+# Additional useful libraries for data analysis
+seaborn>=0.12.0
+plotly>=5.15.0
+
+# JSON handling (usually included in Python, but for clarity)
+jsonschema>=4.17.0
+
+# For better terminal output and progress bars
+tqdm>=4.65.0
+colorama>=0.4.6
+
+# For advanced statistics (optional)
+scipy>=1.10.0

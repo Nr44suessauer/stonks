@@ -1,7 +1,7 @@
 """
-model_manager.py - Modellverwaltung für Ollama
+model_manager.py - Model management for Ollama
 
-Dieses Modul enthält Funktionen zum Prüfen und Laden von Modellen über die Ollama-API.
+This module contains functions for checking and loading models via the Ollama API.
 """
 
 import requests
@@ -9,19 +9,19 @@ import json
 import time
 
 def check_model_exists(api_url, model_name):
-    """Überprüft, ob ein bestimmtes Modell in Ollama vorhanden ist."""
+    """Checks if a specific model exists in Ollama."""
     try:
         response = requests.get(f"{api_url}/tags")
         models = response.json().get('models', [])
         exists = any(model['name'] == model_name for model in models)
         return exists
     except Exception as e:
-        print(f"⚠️ Fehler beim Prüfen des Modells {model_name}: {str(e)}")
+        print(f"⚠️ Error checking model {model_name}: {str(e)}")
         return False
 
 def load_model(api_url, model_name):
-    """Lädt ein Modell von Ollama, falls es noch nicht vorhanden ist."""
-    print(f"Lade Modell {model_name}...")
+    """Loads a model from Ollama if it's not already present."""
+    print(f"Loading model {model_name}...")
     try:
         response = requests.post(
             f"{api_url}/pull",
@@ -35,20 +35,20 @@ def load_model(api_url, model_name):
                 data = json.loads(line.decode('utf-8'))
                 status = data.get('status', '')
                 
-                # Nur neue Status-Updates anzeigen
+                # Only show new status updates
                 if status != last_status and status:
-                    # Fortschritt anzeigen ohne Zeilenumbruch
+                    # Show progress without newline
                     print(f"Status: {status}", end='\r')
                     last_status = status
                 
                 if 'completed' in status.lower():
-                    print(f"\n✅ {model_name} wurde erfolgreich geladen")
+                    print(f"\n✅ {model_name} was loaded successfully")
                     return True
                 elif 'error' in data:
-                    print(f"\n❌ Fehler beim Laden von {model_name}: {data['error']}")
+                    print(f"\n❌ Error loading {model_name}: {data['error']}")
                     return False
         
         return True
     except Exception as e:
-        print(f"\n❌ Exception beim Laden von {model_name}: {str(e)}")
+        print(f"\n❌ Exception loading {model_name}: {str(e)}")
         return False

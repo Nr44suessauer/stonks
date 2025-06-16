@@ -1,7 +1,7 @@
 """
-benchmark_core.py - Kern-Funktionen für das Benchmarking von Sprachmodellen
+benchmark_core.py - Core functions for language model benchmarking
 
-Dieses Modul enthält die Hauptfunktionen zur Durchführung von Benchmark-Tests mit Ollama.
+This module contains the main functions for conducting benchmark tests with Ollama.
 """
 
 import time
@@ -10,15 +10,15 @@ import requests
 from ollama_server import check_ollama_server, start_ollama_server
 from model_manager import check_model_exists, load_model
 
-# Globale Variablen für den Benchmark-Status
+# Global variables for benchmark status
 _benchmark_running = False
-# Cache für bereits geprüfte Modelle, verhindert doppelte Prüfungen
+# Cache for already checked models, prevents duplicate checks
 _checked_models = set()
-# Eindeutige ID für die aktuelle Benchmark-Ausführung
+# Unique ID for the current benchmark execution
 _execution_id = None
 
 def benchmark_model(api_url, model_name, prompt, max_tokens=100, temperature=0.7, request_timeout=120, retry_timeout=300):
-    """Führt einen Benchmark für ein einzelnes Modell mit einem Prompt durch."""
+    """Performs a benchmark for a single model with a prompt."""
     request_data = {
         "model": model_name,
         "prompt": prompt,
@@ -29,7 +29,7 @@ def benchmark_model(api_url, model_name, prompt, max_tokens=100, temperature=0.7
     
     start_time = time.time()
     try:
-        # Timeout für die Anfrage
+        # Timeout for the request
         response = requests.post(f"{api_url}/generate", json=request_data, timeout=request_timeout)
         end_time = time.time()
         
@@ -41,8 +41,8 @@ def benchmark_model(api_url, model_name, prompt, max_tokens=100, temperature=0.7
             return {
                 "success": True,
                 "response": result.get('response', ''),
-                "total_duration": result.get('total_duration', 0) / 1_000_000_000,  # ns zu s
-                "load_duration": result.get('load_duration', 0) / 1_000_000_000,    # ns zu s
+                "total_duration": result.get('total_duration', 0) / 1_000_000_000,  # ns to s
+                "load_duration": result.get('load_duration', 0) / 1_000_000_000,    # ns to s
                 "eval_count": result.get('eval_count', 0),
                 "generation_time": generation_time,
                 "tokens_per_second": tokens_per_second
@@ -50,12 +50,12 @@ def benchmark_model(api_url, model_name, prompt, max_tokens=100, temperature=0.7
         else:
             return {
                 "success": False,
-                "error": f"Fehler: {response.status_code} - {response.text}"
+                "error": f"Error: {response.status_code} - {response.text}"
             }
     except requests.exceptions.Timeout:
-        print(f"    ⚠️ Timeout bei der Anfrage an {model_name}. Versuche es mit erhöhtem Timeout...")
+        print(f"    ⚠️ Timeout for request to {model_name}. Trying with increased timeout...")
         try:
-            # Zweiter Versuch mit noch höherem Timeout
+            # Second attempt with even higher timeout
             response = requests.post(f"{api_url}/generate", json=request_data, timeout=retry_timeout)
             end_time = time.time()
             
@@ -76,12 +76,12 @@ def benchmark_model(api_url, model_name, prompt, max_tokens=100, temperature=0.7
             else:
                 return {
                     "success": False,
-                    "error": f"Fehler: {response.status_code} - {response.text}"
+                    "error": f"Error: {response.status_code} - {response.text}"
                 }
         except Exception as e:
             return {
                 "success": False,
-                "error": f"Fehler beim zweiten Versuch: {str(e)}"
+                "error": f"Error on second attempt: {str(e)}"
             }
     except Exception as e:
         return {
@@ -90,74 +90,74 @@ def benchmark_model(api_url, model_name, prompt, max_tokens=100, temperature=0.7
         }
 
 def run_benchmark(api_url, models, tasks, temperature=0.7, request_timeout=120, retry_timeout=300):
-    """Führt den vollständigen Benchmark für alle Modelle und Aufgaben durch."""
+    """Performs the complete benchmark for all models and tasks."""
     global _benchmark_running, _checked_models, _execution_id
     
-    # Erzeuge eine einzigartige Ausführungs-ID
+    # Generate a unique execution ID
     current_execution_id = f"{time.time()}-{random.randint(1000, 9999)}"
     
-    # Prüfen, ob der Benchmark bereits läuft
+    # Check if benchmark is already running
     if _benchmark_running:
-        print("⚠️ Benchmark läuft bereits.")
+        print("⚠️ Benchmark is already running.")
         return None
     
-    # Prüfen, ob dies ein Doppelaufruf derselben Ausführung ist
+    # Check if this is a duplicate call of the same execution
     if _execution_id == current_execution_id:
-        print("⚠️ Doppelter Aufruf derselben Benchmark-Ausführung erkannt und übersprungen.")
+        print("⚠️ Duplicate call of the same benchmark execution detected and skipped.")
         return None
     
-    # Sperren für diese Ausführung
+    # Lock for this execution
     _benchmark_running = True
     _execution_id = current_execution_id
     
-    # Modell-Cache leeren
+    # Clear model cache
     _checked_models = set()
     
-    # Überprüfen, ob die Eingabeparameter gültig sind
+    # Check if input parameters are valid
     if not models or len(models) == 0:
-        print("❌ Keine Modelle zum Benchmarking angegeben.")
+        print("❌ No models specified for benchmarking.")
         _benchmark_running = False
         return None
     
     if not tasks or len(tasks) == 0:
-        print("❌ Keine Aufgaben zum Benchmarking angegeben.")
+        print("❌ No tasks specified for benchmarking.")
         _benchmark_running = False
         return None
     
     try:
-        # Server prüfen/ggf. starten
+        # Check/start server if needed
         if not check_ollama_server(api_url):
             if not start_ollama_server(api_url):
-                print("❌ Ollama-Server konnte nicht gestartet werden.")
+                print("❌ Ollama server could not be started.")
                 return None
         
-        # Modelle prüfen/laden (mit Cache-Prüfung)
+        # Check/load models (with cache checking)
         for model in models:
-            # Prüft, ob wir dieses Modell bereits überprüft haben
+            # Check if we've already checked this model
             if model in _checked_models:
                 continue
                 
             _checked_models.add(model)
             
             if not check_model_exists(api_url, model):
-                print(f"⚠️ Modell {model} nicht gefunden. Lade...")
+                print(f"⚠️ Model {model} not found. Loading...")
                 if not load_model(api_url, model):
-                    print(f"❌ Modell {model} konnte nicht geladen werden.")
+                    print(f"❌ Model {model} could not be loaded.")
                     return None
             else:
-                print(f"✅ Modell {model} ist bereit.")
+                print(f"✅ Model {model} is ready.")
         
-        # Tasks im Voraus verarbeiten, um doppelte Aufgaben zu vermeiden
+        # Process tasks in advance to avoid duplicate tasks
         unique_tasks = {}
         for task in tasks:
             unique_tasks[task['name']] = task
             
-        # Benchmark durchführen
+        # Run benchmark
         results = []
         for task_name, task in unique_tasks.items():
-            print(f"\n🧪 Aufgabe: {task_name}")
+            print(f"\n🧪 Task: {task_name}")
             
-            # Jedes Modell nur einmal pro Aufgabe
+            # Each model only once per task
             processed_models = set()
             for model in models:
                 if model in processed_models:
@@ -172,25 +172,24 @@ def run_benchmark(api_url, models, tasks, temperature=0.7, request_timeout=120, 
                     max_tokens=task.get('max_tokens', 100),
                     temperature=temperature,
                     request_timeout=request_timeout,
-                    retry_timeout=retry_timeout
-                )
+                    retry_timeout=retry_timeout                )
                 
                 if res['success']:
                     results.append({
-                        "Modell": model,
-                        "Aufgabe": task_name,
+                        "Model": model,
+                        "Task": task_name,
                         "Prompt": task['prompt'],
-                        "Antwort": res['response'],
-                        "Generierungszeit (s)": res['generation_time'],
-                        "Ladezeit (s)": res['load_duration'],
-                        "Tokens generiert": res['eval_count'],
-                        "Tokens pro Sekunde": res['tokens_per_second']
+                        "Response": res.get('response', ''),
+                        "Generation Time (s)": res.get('generation_time', 0),
+                        "Load Time (s)": res.get('load_duration', 0),
+                        "Tokens Generated": res.get('eval_count', 0),
+                        "Tokens per Second": res.get('tokens_per_second', 0)
                     })
-                    print(f"    ✓ {res['eval_count']} Tokens in {res['generation_time']:.2f}s")
+                    print(f"    ✓ {res.get('eval_count', 0)} tokens in {res.get('generation_time', 0):.2f}s")
                 else:
-                    print(f"    ❌ Fehler: {res.get('error','Unbekannter Fehler')}")
+                    print(f"    ❌ Error: {res.get('error','Unknown error')}")
         
         return results
     finally:
-        # Sperren aufheben
+        # Release lock
         _benchmark_running = False
